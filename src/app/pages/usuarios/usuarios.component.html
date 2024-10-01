@@ -1,0 +1,85 @@
+<div class="container mt-4">
+  <h1 class="mb-4">Gestión de Usuarios</h1>
+  <button class="btn btn-primary mb-3" (click)="crearUsuario()">
+    <i class="bi bi-plus-circle"></i> Crear Usuario
+  </button>
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead class="table-light">
+        <tr>
+          <th>ID</th>
+          <th>Rol</th>
+          <th>Nombre</th>
+          <th>Estado</th>
+          <th>Creado</th>
+          <th>Actualizado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let usuario of usuarios">
+          <td>{{ usuario.id }}</td>
+          <td>{{ getNombreRol(usuario.rol_id) }}</td>
+          <td>{{ usuario.usu_nombre }}</td>
+          <td>
+            <span class="badge" [ngClass]="{'bg-success': usuario.usu_estado === 'activo', 'bg-danger': usuario.usu_estado !== 'activo'}">
+              {{ usuario.usu_estado }}
+            </span>
+          </td>
+          <td>{{ usuario.created_at | date:'short' }}</td>
+          <td>{{ usuario.updated_at | date:'short' }}</td>
+          <td>
+            <button class="btn btn-sm btn-outline-primary me-1" (click)="editarUsuario(usuario)">
+              <i class="bi bi-pencil"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-danger" (click)="eliminarUsuario(usuario)">
+              <i class="bi bi-trash"></i>
+              Eliminar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal" tabindex="-1" [ngClass]="{'show': modalAbierto}" [ngStyle]="{'display': modalAbierto ? 'block' : 'none'}">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ usuarioSeleccionado.id === 0 ? 'Crear Usuario' : 'Editar Usuario' }}</h5>
+          <button type="button" class="btn-close" (click)="cerrarModal()"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label for="rol_id" class="form-label">Rol</label>
+              <select class="form-select" id="rol_id" [(ngModel)]="usuarioSeleccionado.rol_id" name="rol_id" required>
+                <option [value]="rol.id" *ngFor="let rol of roles">{{ rol.nombre }}</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="usu_nombre" class="form-label">Nombre</label>
+              <input type="text" class="form-control" id="usu_nombre" [(ngModel)]="usuarioSeleccionado.usu_nombre" name="usu_nombre" required>
+            </div>
+            <div class="mb-3">
+              <label for="usu_estado" class="form-label">Estado</label>
+              <select class="form-select" id="usu_estado" [(ngModel)]="usuarioSeleccionado.usu_estado" name="usu_estado" required>
+                <option value="activo">Activo</option>
+                <option value="inactivo">Inactivo</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="usu_pass" class="form-label">Contraseña</label>
+              <input type="password" class="form-control" id="usu_pass" [(ngModel)]="usuarioSeleccionado.usu_pass" name="usu_pass" required>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="cerrarModal()">Cerrar</button>
+          <button type="button" class="btn btn-primary" (click)="guardarUsuario()">Guardar cambios</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

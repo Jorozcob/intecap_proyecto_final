@@ -1,0 +1,36 @@
+<div class="container vh-100 d-flex justify-content-center align-items-center">
+  <div class="row w-100">
+    <div class="col-md-6 mx-auto">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Autenticación</h5>
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <!--Usuario-->
+            <div class="mb-3">
+              <label for="username">Nombre de Usuario</label>
+
+              <input type="text" id="username" formControlName="username" class="form-control" placeholder="Introduce tu nombre de usuario"/>
+              <div *ngIf="loginForm.get('username')?.invalid && (loginForm.get('username')?.touched || loginForm.get('username')?.dirty)" class="text-danger">
+                <small>El nombre de usuario es necesario.</small>
+              </div>
+            </div>
+            <!--Contraseña-->
+            <div class="mb-3">
+              <label for="password">Contraseña</label>
+              <input type="password" id="password" formControlName="password" class="form-control" placeholder="Introduce tu contraseña"/>
+              <div *ngIf="loginForm.get('password')?.invalid && (loginForm.get('password')?.touched || loginForm.get('password')?.dirty)" class="text-danger">
+                <small>La contraseña es necesaria.</small>
+              </div>
+            </div>
+            <!--Mensaje de error-->
+            <div *ngIf="loginError" class="text-danger mb-3">
+              {{ loginError }}
+            </div>
+            <!--Botón-->
+            <button type="submit" class="btn btn-primary" [disabled]="loginForm.invalid">Iniciar Sesión</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
