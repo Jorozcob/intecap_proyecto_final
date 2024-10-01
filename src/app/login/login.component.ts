@@ -4,12 +4,11 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { HttpClientModule } from '@angular/common/http';
-import { DashboardComponent } from '../dashboard/dashboard.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, HttpClientModule, DashboardComponent],
+  imports: [CommonModule, ReactiveFormsModule, HttpClientModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
@@ -34,12 +33,21 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       const username = this.loginForm.get('username')?.value;
       const password = this.loginForm.get('password')?.value;
-      
+
       this.authService.login(username, password).subscribe({
         next: (response) => {
           console.log('Login exitoso:', response);
-          // Manejar el login exitoso (por ejemplo, almacenar el token, navegar al dashboard)
-          this.router.navigate(['/dashboard']);
+          if (response && response.user) {
+            // Guardar todos los datos del usuario en sessionStorage
+            sessionStorage.setItem('userData', JSON.stringify(response.user));
+            console.log('Datos del usuario guardados en sessionStorage');
+            
+            // Navegar al dashboard
+            this.router.navigate(['/dashboard']);
+          } else {
+            console.error('La respuesta del servidor no contiene los datos del usuario esperados');
+            this.loginError = 'Error en la respuesta del servidor. Por favor, intente nuevamente.';
+          }
         },
         error: (error) => {
           console.error('Login fallido:', error);
