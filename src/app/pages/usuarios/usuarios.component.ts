@@ -22,8 +22,8 @@ export class UsuariosComponent implements OnInit {
   modalAbierto = false;
   roles: Rol[] = [
     { id: 1, nombre: 'Admin' },
-    { id: 2, nombre: 'Doctor' },
-    { id: 3, nombre: 'Paciente' }
+    { id: 3, nombre: 'Doctor' },
+    { id: 2, nombre: 'Paciente' }
   ];
 
   constructor(private userService: UserService) { }

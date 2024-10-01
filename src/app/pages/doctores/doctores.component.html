@@ -1,0 +1,101 @@
+<div class="container mt-4">
+  <h1 class="mb-4">Gestión de Doctores</h1>
+  <button class="btn btn-primary mb-3" (click)="abrirModal()">
+    <i class="bi bi-plus-circle"></i> Crear Doctor
+  </button>
+
+  <div class="table-responsive">
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>Teléfono</th>
+          <th>Email</th>
+          <th>Estado</th>
+          <th>Usuario ID</th>
+          <th>Creado</th>
+          <th>Actualizado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let doctor of doctores">
+          <td>{{ doctor.id }}</td>
+          <td>{{ doctor.med_nombre }}</td>
+          <td>{{ doctor.med_apellido }}</td>
+          <td>{{ doctor.med_telefono }}</td>
+          <td>{{ doctor.med_email }}</td>
+          <td>
+            <span class="badge" [ngClass]="{'bg-success': doctor.med_estado === 'Activo', 'bg-danger': doctor.med_estado !== 'Activo'}">
+              {{ doctor.med_estado }}
+            </span>
+          </td>
+          <td>{{ doctor.usuario_id }}</td>
+          <td>{{ doctor.created_at | date:'short' }}</td>
+          <td>{{ doctor.updated_at | date:'short' }}</td>
+          <td>
+            <button class="btn btn-sm btn-outline-primary me-1" (click)="abrirModal(doctor)">
+              <i class="bi bi-pencil"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-danger" (click)="eliminarDoctor(doctor.id)">
+              <i class="bi bi-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal" [ngClass]="{'show': modalAbierto}" [ngStyle]="{'display': modalAbierto ? 'block' : 'none'}" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ doctorSeleccionado?.id ? 'Editar' : 'Crear' }} Doctor</h5>
+          <button type="button" class="btn-close" (click)="cerrarModal()"></button>
+        </div>
+        <div class="modal-body">
+          <form *ngIf="doctorSeleccionado">
+            <div class="row mb-3">
+              <div class="col">
+                <label for="med_nombre" class="form-label">Nombre</label>
+                <input type="text" class="form-control" id="med_nombre" [(ngModel)]="doctorSeleccionado.med_nombre" name="med_nombre" required>
+              </div>
+              <div class="col">
+                <label for="med_apellido" class="form-label">Apellido</label>
+                <input type="text" class="form-control" id="med_apellido" [(ngModel)]="doctorSeleccionado.med_apellido" name="med_apellido" required>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col">
+                <label for="med_telefono" class="form-label">Teléfono</label>
+                <input type="text" class="form-control" id="med_telefono" [(ngModel)]="doctorSeleccionado.med_telefono" name="med_telefono" required>
+              </div>
+              <div class="col">
+                <label for="med_email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="med_email" [(ngModel)]="doctorSeleccionado.med_email" name="med_email" required>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="med_estado" class="form-label">Estado</label>
+              <select class="form-select" id="med_estado" [(ngModel)]="doctorSeleccionado.med_estado" name="med_estado" required>
+                <option value="activo">Activo</option>
+                <option value="inactivo">Inactivo</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="usuario_id" class="form-label">Usuario ID</label>
+              <input type="number" class="form-control" id="usuario_id" [(ngModel)]="doctorSeleccionado.usuario_id" name="usuario_id" required>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="cerrarModal()">Cancelar</button>
+          <button type="button" class="btn btn-primary" (click)="guardarDoctor()">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

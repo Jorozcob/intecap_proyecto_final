@@ -3,6 +3,9 @@ import { LoginComponent } from './login/login.component';
 import { NgModule } from '@angular/core';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { UsuariosComponent } from './pages/usuarios/usuarios.component';
+import { AdminComponent } from './pages/admin/admin.component';
+import { DoctoresComponent } from './pages/doctores/doctores.component';
+import { PacientesComponent } from './pages/pacientes/pacientes.component';
 
 // Importar más componentes aquí si es necesario
 
@@ -16,6 +19,9 @@ export const routes: Routes = [
     component: DashboardComponent,
     children: [
       { path: 'usuarios', component: UsuariosComponent },
+      {path: 'admin', component: AdminComponent},
+      {path: 'doctores', component: DoctoresComponent},
+      {path: 'pacientes', component: PacientesComponent},
       // Añade más rutas aquí, como:
       // { path: 'customers', component: CustomersComponent },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' } // Redirige al componente predeterminado dentro del dashboard

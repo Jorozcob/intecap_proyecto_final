@@ -1,0 +1,94 @@
+<div class="container mt-4">
+  <h1 class="mb-4">Gestión de Administradores</h1>
+  <button class="btn btn-primary mb-3" (click)="openModal()">
+    <i class="bi bi-plus-circle"></i> Crear Administrador
+  </button>
+
+  <div class="table-responsive">
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>Cargo</th>
+          <th>Teléfono</th>
+          <th>Email</th>
+          <th>Usuario ID</th>
+          <th>Creado</th>
+          <th>Actualizado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let admin of admins">
+          <td>{{ admin.id }}</td>
+          <td>{{ admin.adm_nombre }}</td>
+          <td>{{ admin.adm_apellido }}</td>
+          <td>{{ admin.adm_cargo }}</td>
+          <td>{{ admin.adm_telefono }}</td>
+          <td>{{ admin.adm_email }}</td>
+          <td>{{ admin.usuario_id }}</td>
+          <td>{{ admin.created_at | date:'short' }}</td>
+          <td>{{ admin.updated_at | date:'short' }}</td>
+          <td>
+            <button class="btn btn-sm btn-outline-primary me-1" (click)="openModal(admin)">
+              <i class="bi bi-pencil"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-danger" (click)="deleteAdmin(admin.id)">
+              <i class="bi bi-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal" [ngClass]="{'show': isModalOpen}" [ngStyle]="{'display': isModalOpen ? 'block' : 'none'}" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ selectedAdmin?.id ? 'Editar' : 'Crear' }} Administrador</h5>
+          <button type="button" class="btn-close" (click)="closeModal()"></button>
+        </div>
+        <div class="modal-body">
+          <form *ngIf="selectedAdmin">
+            <div class="row mb-3">
+              <div class="col">
+                <label for="adm_nombre" class="form-label">Nombre</label>
+                <input type="text" class="form-control" id="adm_nombre" [(ngModel)]="selectedAdmin.adm_nombre" name="adm_nombre" required>
+              </div>
+              <div class="col">
+                <label for="adm_apellido" class="form-label">Apellido</label>
+                <input type="text" class="form-control" id="adm_apellido" [(ngModel)]="selectedAdmin.adm_apellido" name="adm_apellido" required>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col">
+                <label for="adm_cargo" class="form-label">Cargo</label>
+                <input type="text" class="form-control" id="adm_cargo" [(ngModel)]="selectedAdmin.adm_cargo" name="adm_cargo" required>
+              </div>
+              <div class="col">
+                <label for="adm_telefono" class="form-label">Teléfono</label>
+                <input type="text" class="form-control" id="adm_telefono" [(ngModel)]="selectedAdmin.adm_telefono" name="adm_telefono" required>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="adm_email" class="form-label">Email</label>
+              <input type="email" class="form-control" id="adm_email" [(ngModel)]="selectedAdmin.adm_email" name="adm_email" required>
+            </div>
+            <div class="mb-3">
+              <label for="usuario_id" class="form-label">Usuario ID</label>
+              <input type="number" class="form-control" id="usuario_id" [(ngModel)]="selectedAdmin.usuario_id" name="usuario_id" required>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancelar</button>
+          <button type="button" class="btn btn-primary" (click)="saveAdmin()">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
