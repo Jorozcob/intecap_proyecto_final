@@ -1,0 +1,72 @@
+<div class="container mt-4">
+  <h1 class="mb-4">Gestión de Salas</h1>
+  <button class="btn btn-primary mb-3" (click)="openModal()">
+    <i class="bi bi-plus-circle"></i> Crear Sala
+  </button>
+
+  <div class="table-responsive">
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th>Estado</th>
+          <th>Creado</th>
+          <th>Actualizado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let sala of salas">
+          <td>{{ sala.id }}</td>
+          <td>{{ sala.sal_nombre }}</td>
+          <td>{{ sala.sal_descripcion }}</td>
+          <td>{{ sala.sal_estado }}</td>
+          <td>{{ sala.created_at | date:'short' }}</td>
+          <td>{{ sala.updated_at | date:'short' }}</td>
+          <td>
+            <button class="btn btn-sm btn-outline-primary me-1" (click)="openModal(sala)">
+              <i class="bi bi-pencil"></i> Actualizar
+            </button>
+            <button class="btn btn-sm btn-outline-danger" (click)="deleteSala(sala.id)">
+              <i class="bi bi-trash"></i> Eliminar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal" [ngClass]="{'show': isModalOpen}" [ngStyle]="{'display': isModalOpen ? 'block' : 'none'}" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ selectedSala?.id ? 'Editar' : 'Crear' }} Sala</h5>
+          <button type="button" class="btn-close" (click)="closeModal()"></button>
+        </div>
+        <div class="modal-body">
+          <form *ngIf="selectedSala">
+            <div class="mb-3">
+              <label for="sal_nombre" class="form-label">Nombre</label>
+              <input type="text" class="form-control" id="sal_nombre" [(ngModel)]="selectedSala.sal_nombre" name="sal_nombre" required>
+            </div>
+            <div class="mb-3">
+              <label for="sal_descripcion" class="form-label">Descripción</label>
+              <textarea class="form-control" id="sal_descripcion" [(ngModel)]="selectedSala.sal_descripcion" name="sal_descripcion" required></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="sal_estado" class="form-label">Estado</label>
+              <input type="text" class="form-control" id="sal_estado" [(ngModel)]="selectedSala.sal_estado" name="sal_estado" required>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancelar</button>
+          <button type="button" class="btn btn-primary" (click)="saveSala()">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
