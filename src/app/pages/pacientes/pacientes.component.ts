@@ -16,6 +16,7 @@ export class PacientesComponent implements OnInit {
   pacientes: Paciente[] = [];
   pacienteSeleccionado: Paciente | null = null;
   modalAbierto = false;
+  cargando = false;
 
   constructor(private pacienteService: PacienteService) {}
 
@@ -24,29 +25,35 @@ export class PacientesComponent implements OnInit {
   }
 
   cargarPacientes() {
+    this.cargando = true;
     this.pacienteService.getPacientes().subscribe({
       next: (data) => {
         this.pacientes = data;
+        this.cargando = false;
         console.log('Pacientes cargados:', data);
       },
       error: (error) => {
         console.error('Error al cargar pacientes:', error);
         this.mostrarError('Error al cargar los pacientes');
+        this.cargando = false;
       }
     });
   }
 
   abrirModal(paciente?: Paciente) {
     this.pacienteSeleccionado = paciente ? { ...paciente } : {
-      nombre: '',
-      apellido: '',
-      fecha_nacimiento: '',
-      sexo: 'M',
-      direccion: '',
-      telefono: '',
-      email: '',
-      estado: 'Activo',
+      id: 0,
+      pac_nombre: '',
+      pac_apellido: '',
+      pac_fecha_nacimiento: '',
+      pac_sexo: 'M',
+      pac_direccion: '',
+      pac_telefono: '',
+      pac_email: '',
+      pac_estado: 'Activo',
       usuario_id: 0,
+      created_at: '',
+      updated_at: '',
       alergias: []
     };
     this.modalAbierto = true;
@@ -59,21 +66,21 @@ export class PacientesComponent implements OnInit {
 
   guardarPaciente() {
     if (this.pacienteSeleccionado && this.esPacienteValido(this.pacienteSeleccionado)) {
+      this.cargando = true;
       if (this.pacienteSeleccionado.id) {
         this.actualizarPaciente(this.pacienteSeleccionado);
       } else {
         this.crearPaciente(this.pacienteSeleccionado);
       }
-      this.cerrarModal();
     } else {
       this.mostrarError('Por favor, complete todos los campos requeridos correctamente');
     }
   }
 
   esPacienteValido(paciente: Paciente): boolean {
-    return !!(paciente.nombre && paciente.apellido && paciente.fecha_nacimiento &&
-              paciente.sexo && paciente.direccion && paciente.telefono &&
-              paciente.email && paciente.estado && paciente.usuario_id);
+    return !!(paciente.pac_nombre && paciente.pac_apellido && paciente.pac_fecha_nacimiento &&
+              paciente.pac_sexo && paciente.pac_direccion && paciente.pac_telefono &&
+              paciente.pac_email && paciente.pac_estado && paciente.usuario_id);
   }
 
   crearPaciente(paciente: Paciente) {
@@ -81,11 +88,14 @@ export class PacientesComponent implements OnInit {
       next: (pacienteCreado) => {
         this.pacientes.push(pacienteCreado);
         this.mostrarExito('Paciente creado exitosamente');
-        this.cargarPacientes(); // Recargar la lista para asegurar datos actualizados
+        this.cargarPacientes();
+        this.cerrarModal();
+        this.cargando = false;
       },
       error: (error) => {
         console.error('Error al crear paciente:', error);
         this.mostrarError('Error al crear el paciente');
+        this.cargando = false;
       }
     });
   }
@@ -98,25 +108,31 @@ export class PacientesComponent implements OnInit {
           this.pacientes[index] = pacienteActualizado;
         }
         this.mostrarExito('Paciente actualizado exitosamente');
-        this.cargarPacientes(); // Recargar la lista para asegurar datos actualizados
+        this.cargarPacientes();
+        this.cerrarModal();
+        this.cargando = false;
       },
       error: (error) => {
         console.error('Error al actualizar paciente:', error);
         this.mostrarError('Error al actualizar el paciente');
+        this.cargando = false;
       }
     });
   }
 
   eliminarPaciente(id: number) {
     if (confirm('¿Está seguro de que desea eliminar este paciente?')) {
+      this.cargando = true;
       this.pacienteService.deletePaciente(id).subscribe({
         next: () => {
           this.pacientes = this.pacientes.filter(paciente => paciente.id !== id);
           this.mostrarExito('Paciente eliminado exitosamente');
+          this.cargando = false;
         },
         error: (error) => {
           console.error('Error al eliminar paciente:', error);
           this.mostrarError('Error al eliminar el paciente');
+          this.cargando = false;
         }
       });
     }
