@@ -6,6 +6,7 @@ import { UsuariosComponent } from './pages/usuarios/usuarios.component';
 import { AdminComponent } from './pages/admin/admin.component';
 import { DoctoresComponent } from './pages/doctores/doctores.component';
 import { PacientesComponent } from './pages/pacientes/pacientes.component';
+import { SalaComponent } from './pages/sala/sala.component';
 
 // Importar más componentes aquí si es necesario
 
@@ -22,6 +23,7 @@ export const routes: Routes = [
       {path: 'admin', component: AdminComponent},
       {path: 'doctores', component: DoctoresComponent},
       {path: 'pacientes', component: PacientesComponent},
+      {path: 'salas', component: SalaComponent},
       // Añade más rutas aquí, como:
       // { path: 'customers', component: CustomersComponent },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' } // Redirige al componente predeterminado dentro del dashboard
